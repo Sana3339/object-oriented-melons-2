@@ -6,7 +6,10 @@ import datetime
 class TooManyMelonsError(ValueError):
     """Error to raise if too many melons have been ordered."""
 
-    super().__init__("Melon order quantity exceeded 100.")
+    def __init__(self):
+        """Initialize TooManyMelonsError using init methods from ValueError."""
+
+        super().__init__("Melon order quantity exceeded 100.")
 
 
 class AbstractMelonOrder():
