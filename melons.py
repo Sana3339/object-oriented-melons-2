@@ -1,6 +1,6 @@
 """Classes for melon orders."""
 
-class AbstractMelonClass():
+class AbstractMelonOrder():
     """An abstract base class that other Melon Order classes inherit from.
 
     Attributes:
@@ -28,7 +28,14 @@ class AbstractMelonClass():
         """
 
         base_price = 5
+
+        if self.species == "christmas" or self.species == "Christmas":
+            base_price = base_price * 1.5
+
         total = (1 + self.tax) * self.qty * base_price
+
+        if self.order_type == "international" and self.qty < 10:
+            total += 3
 
         return total
 
@@ -46,23 +53,26 @@ class AbstractMelonClass():
         self.shipped = True
 
 
-class DomesticMelonOrder(AbstractMelonClass):
+class DomesticMelonOrder(AbstractMelonOrder):
     """A melon order within the USA.
 
-    Inherits attributes and methods from AbstractMelonClass"""
+    Inherits attributes and methods from AbstractMelonOrder.
+    """
 
     def __init__(self, species, qty):
         super().__init__(species, qty, "domestic", 0.08)
+        """Initialize domestic melon order attributes."""
 
 
-class InternationalMelonOrder(AbstractMelonClass):
+class InternationalMelonOrder(AbstractMelonOrder):
     """An international (non-US) melon order.
 
-    Inherits attributes and methods from AbstractMelonClass."""
+    Inherits attributes and methods from AbstractMelonOrder.
+    """
 
     def __init__(self, species, qty, country_code):
         super().__init__(species, qty, "international", 0.17)
-        """Initialize melon order attributes."""
+        """Initialize international melon order attributes."""
 
         self.country_code = country_code
 
@@ -71,3 +81,27 @@ class InternationalMelonOrder(AbstractMelonClass):
         """Return the country code."""
 
         return self.country_code
+
+class GovernmentMelonOrder(AbstractMelonOrder):
+    """A melon order made by the US government.
+
+    Inherits attributes and methods from AbstractMelonOrder.
+    """
+
+    def __init__(self, species, qty):
+        super().__init__(self, species, qty, 'government', 0.0)
+        """Initialize government melon order attributes."""
+
+        self.passed_inspection = False
+
+    def mark_inspection(self, passed):
+        """Takes a Boolean inut and updates whether or not melon has passed inspection.
+
+        Arguments:
+            - Boolean value for whether or not melon has passed inspection.
+
+        Return:
+            None
+        """
+
+        self.passed_inspection = passed
